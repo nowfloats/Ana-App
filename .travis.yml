@@ -1,0 +1,32 @@
+language: node_js
+node_js:
+  - "node"
+
+sudo: true
+dist: trusty
+
+branches:
+  only:
+    - travisci    #Master only builds for prod. For now changing it to Travis CI Branch
+                  #dev branch push will triger build for non prod deployment
+
+before_script:
+  # - npm install -g firebase-tools
+  - npm install
+  # - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
+  # - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
+  # - npm install 
+
+script:
+  - ng build --prod --aot=false
+
+# after_success:
+#   - firebase deploy --token $FIREBASE_TOKEN
+
+notifications:
+  email:
+    - soumyajit.dutta@nowfloats.com
+    - khaja.nizamuddin@nowfloats.com
+  slack:
+    on_success: always
+    on_failure: always
