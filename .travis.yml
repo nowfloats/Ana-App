@@ -33,8 +33,9 @@ before_script:
   #Copying
   - mkdir dist/simulator  # For web chat
   - mkdir dist/analytics-dashboard # For analytics dash
-  - cp -R ANAChat-Web/dist/* dist/simulator
-  - cp -R Ana-Analytics-Dashboard/dist/* dist/analytics-dashboard
+  - ls
+  - cp -R ANAChat-Web/dist/ dist/simulator
+  - cp -R Ana-Analytics-Dashboard/dist/ dist/analytics-dashboard
 
 script:
   - rm -R release/
