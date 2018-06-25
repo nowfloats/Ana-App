@@ -11,6 +11,7 @@ branches:
                   #dev branch push will triger build for non prod deployment
 
 before_script:
+  - npm install -g @angular/cli@1.6.1
   - npm install
   # - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
   # - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
