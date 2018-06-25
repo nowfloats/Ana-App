@@ -1,6 +1,6 @@
 {
   "name": "ana-conversation-studio",
-  "version": "0.0.0",
+  "version": "1",
   "license": "GNU-GPLv3",
   "scripts": {
     "ng": "ng",
