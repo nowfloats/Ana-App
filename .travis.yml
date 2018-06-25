@@ -14,9 +14,11 @@ before_script:
   - npm install @angular-devkit/core
   - npm install -g @angular/cli@1.6.1
   - npm install
-  # - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
-  # - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
-  # - npm install 
+  - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
+  - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
+  #For Dash
+  - npm install Ana-Analytics-Dashboard/
+  - ng build --prod --aot=false Ana-Analytics-Dashboard/
 
 script:
   - ng build --prod --aot=false
