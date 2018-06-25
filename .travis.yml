@@ -28,10 +28,17 @@ before_script:
   - npm i node-sass Ana-Analytics-Dashboard/
   - npm ci Ana-Analytics-Dashboard/
   - npm install -g @angular/cli@1.6.1 Ana-Analytics-Dashboard/
-  # - ng build --prod --aot=false Ana-Analytics-Dashboard/
+  - ng build --prod --aot=false Ana-Analytics-Dashboard/
+
+  #Copying
+  - mkdir dist/simulator  # For web chat
+  - mkdir dist/analytics-dashboard # For analytics dash
+  - cp -R ANAChat-Web/dist/* dist/simulator
+  - cp -R Ana-Analytics-Dashboard/dist/* dist/analytics-dashboard
 
 script:
-  - ng build --prod --aot=false Ana-Analytics-Dashboard/
+  - rm -R release/
+  - ./dist/electron-builder
 
 notifications:
   email:
