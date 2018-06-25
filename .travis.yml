@@ -17,8 +17,8 @@ before_script:
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
   - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
   #For Dash
-  - npm install Ana-Analytics-Dashboard/
-  - ng build --prod --aot=false Ana-Analytics-Dashboard/
+  - npm install ANAChat-Web/
+  - ng build --prod --aot=false ANAChat-Web/
 
 script:
   - ng build --prod --aot=false
