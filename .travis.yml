@@ -11,17 +11,26 @@ branches:
                   #dev branch push will triger build for non prod deployment
 
 before_script:
+  # For ana APP
   - npm install @angular-devkit/core
   - npm install -g @angular/cli@1.6.1
   - npm install
+  - ng build --prod --aot=false
+  #Cloning other repos
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
   - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
-  #For Dash
+  #For Chat-Web
   - npm install ANAChat-Web/
   - ng build --prod --aot=false ANAChat-Web/
+  #For analytics-dash
+  - npm i -g npm@5.7.1 Ana-Analytics-Dashboard/
+  - npm i node-sass Ana-Analytics-Dashboard/
+  - npm ci Ana-Analytics-Dashboard/
+  - npm install -g @angular/cli@1.6.1 Ana-Analytics-Dashboard/
+  # - ng build --prod --aot=false Ana-Analytics-Dashboard/
 
 script:
-  - ng build --prod --aot=false
+  - ng build --prod --aot=false Ana-Analytics-Dashboard/
 
 notifications:
   email:
