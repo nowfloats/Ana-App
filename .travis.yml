@@ -44,8 +44,9 @@ before_script:
   - cp -R dist2/analytics-dashboard/* dist/analytics-dashboard/
   
 script:
-  - rm -R release/
-  - ./dist/electron-builder
+  - npm install electron-builder --save-dev
+  - cd dist/
+  - electron-builder
 
 notifications:
   email:
