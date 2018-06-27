@@ -11,6 +11,7 @@ branches:
                   #dev branch push will triger build for non prod deployment
 
 before_script:
+  - mkdir dist2
   #Cloning other repos
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
   - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
@@ -23,25 +24,25 @@ before_script:
   - npm ci Ana-Analytics-Dashboard/
   - npm install -g @angular/cli@1.6.1 Ana-Analytics-Dashboard/
   - ng build --prod --aot=false Ana-Analytics-Dashboard/ Ana-Analytics-Dashboard/
-  - -cp -R ANAChat-Web/dist/* dist/simulator
+  - mkdir dist2/analytics-dashboard
+  - cp -R dist/* dist2/analytics-dashboard/
   - ls -l
   - ls -l Ana-Analytics-Dashboard/
+  #For Chat-Web
+  - npm install ANAChat-Web/
+  - ng build --prod --aot=false ANAChat-Web/ ANAChat-Web/
+  - mkdir dist2/simulator  # For web chat
+  - ls -l ANAChat-Web/
+  - cp -R dist/* dist2/simulator/
   # For ana APP
   - npm install
   - ng build --prod --aot=false
   - ls -l
-  #For Chat-Web
-  - npm install ANAChat-Web/
-  - cp -R ANAChat-Web/dist/* dist/simulator
-  - ng build --prod --aot=false ANAChat-Web/ ANAChat-Web/
-  - mkdir dist/simulator  # For web chat
-  - ls -l ANAChat-Web/
-
-  #Copying
-  - mkdir dist/analytics-dashboard # For analytics dash
-  - ls
-  - cp -R Ana-Analytics-Dashboard/dist/ dist/analytics-dashboard
-
+  - mkdir dist/simulator
+  - mkdir dist/analytics-dashboard
+  - cp -R dist2/simulator/* dist/simulator/
+  - cp -R dist2/analytics-dashboard/* dist/analytics-dashboard/
+  
 script:
   - rm -R release/
   - ./dist/electron-builder
