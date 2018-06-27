@@ -23,6 +23,7 @@ before_script:
   - npm ci Ana-Analytics-Dashboard/
   - npm install -g @angular/cli@1.6.1 Ana-Analytics-Dashboard/
   - ng build --prod --aot=false Ana-Analytics-Dashboard/ Ana-Analytics-Dashboard/
+  - -cp -R ANAChat-Web/dist/* dist/simulator
   - ls -l
   - ls -l Ana-Analytics-Dashboard/
   # For ana APP
@@ -31,14 +32,14 @@ before_script:
   - ls -l
   #For Chat-Web
   - npm install ANAChat-Web/
+  - cp -R ANAChat-Web/dist/* dist/simulator
   - ng build --prod --aot=false ANAChat-Web/ ANAChat-Web/
+  - mkdir dist/simulator  # For web chat
   - ls -l ANAChat-Web/
 
   #Copying
-  - mkdir dist/simulator  # For web chat
   - mkdir dist/analytics-dashboard # For analytics dash
   - ls
-  - cp -R ANAChat-Web/dist/ dist/simulator
   - cp -R Ana-Analytics-Dashboard/dist/ dist/analytics-dashboard
 
 script:
