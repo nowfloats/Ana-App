@@ -15,6 +15,8 @@ before_script:
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
   - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
   #For analytics-dash
+  - npm install @angular-devkit/core
+  - npm install -g @angular/cli@1.6.1
   - npm install typings -g
   - npm i -g npm@5.7.1 Ana-Analytics-Dashboard/
   - npm i node-sass Ana-Analytics-Dashboard/
@@ -22,8 +24,6 @@ before_script:
   - npm install -g @angular/cli@1.6.1 Ana-Analytics-Dashboard/
   - ng build --prod --aot=false Ana-Analytics-Dashboard/ Ana-Analytics-Dashboard/
   # For ana APP
-  - npm install @angular-devkit/core
-  - npm install -g @angular/cli@1.6.1
   - npm install
   - ng build --prod --aot=false
   #For Chat-Web
