@@ -29,7 +29,6 @@
     "bootstrap": "^3.3.7",
     "bson": "^1.0.4",
     "core-js": "^2.4.1",
-    "electron": "~1.8.2-beta.3",
     "font-awesome": "^4.7.0",
     "jsonpath": "^1.0.0",
     "ngx-electron": "^1.0.4",
