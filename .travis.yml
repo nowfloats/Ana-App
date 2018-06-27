@@ -24,7 +24,7 @@ before_script:
   - ng build --prod --aot=false ANAChat-Web/ ANAChat-Web/
   #For analytics-dash
   - npm install typings -g
-  - npm i -g npm@5.7.1 Ana-Analytics-Dashboard/
+  # - npm i -g npm@5.7.1 Ana-Analytics-Dashboard/
   - npm i node-sass Ana-Analytics-Dashboard/
   - npm ci Ana-Analytics-Dashboard/
   - npm install -g @angular/cli@1.6.1 Ana-Analytics-Dashboard/
