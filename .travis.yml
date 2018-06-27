@@ -45,6 +45,8 @@ before_script:
   
 script:
   - npm install -g electron-builder
+  - npm install -g popper.js
+  - npm install -g jquery
   - electron-builder dist/
 
 notifications:
