@@ -48,7 +48,8 @@ script:
   - npm install -g popper.js
   - npm install -g jquery
   - npm install dist/
-  - electron-builder dist/
+  - cd dist/
+  - electron-builder
 
 notifications:
   email:
