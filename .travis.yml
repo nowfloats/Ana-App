@@ -28,9 +28,9 @@ before_script:
   - npm i npm@latest -g
   - npm install typings -g
   - npm i @angular-devkit/core
-  - sudo npm install -g @angular/cli@1.6.1
-  - sudo npm i node-sass
-  - sudo npm ci
+  - npm install -g @angular/cli@1.6.1
+  - npm i node-sass
+  - npm ci
   - ng build --prod --aot=false
   - cd ..
   - mkdir dist2/analytics-dashboard
@@ -39,15 +39,15 @@ before_script:
   - ls -l Ana-Analytics-Dashboard/
   #For Chat-Web
   - cd ANAChat-Web/
-  - sudo npm i node-sass
-  - sudo npm install
+  - npm i node-sass
+  - npm install
   - ng build --prod --aot=false
   - cd ..
   - mkdir dist2/simulator  # For web chat
   - ls -l ANAChat-Web/
   - cp -R ANAChat-Web/dist/* dist2/simulator/
   # For ana APP
-  - sudo npm install
+  - npm install
   - ng build --prod --aot=false
   - ls -l
   - mkdir dist/simulator
