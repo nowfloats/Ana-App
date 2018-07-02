@@ -1,26 +1,22 @@
-language: node
-sudo: true
-dist: trusty
+language: node_js
 node_js:
   - "node"
+
+sudo: true
+dist: trusty
 
 branches:
   only:
     - travisci    #Master only builds for prod. For now changing it to Travis CI Branch
                   #dev branch push will triger build for non prod deployment
 
-cache:
-  directories:
-  - "$HOME/.npm"
 before_script:
-  - 'echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config'
-  # - sudo apt-get install npm
-  - npm config set strict-ssl false
   - mkdir dist2
   #Cloning other repos
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
   - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
   - rm -rf node_modules/
+  - npm i -g npm@5.7.1
   #For analytics-dash
   - cd Ana-Analytics-Dashboard/
   - npm install typings -g
