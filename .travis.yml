@@ -62,8 +62,8 @@ script:
   - npm install -g jquery
   - sudo apt update
   - sudo apt install snapd
+  - sudo snap install snapcraft
   - sudo snap install snapcraft --classic
-  - sudo apt install snapcraft
   - snap version
   - snap list snapcraft
   - snapcraft --version
