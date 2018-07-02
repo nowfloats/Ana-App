@@ -15,6 +15,7 @@ install:
 
 before_script:
   - mkdir dist2
+  - sudo npm install -g npm
   - npm cache clean --force
   - npm install 
   - ng build --prod --aot=false
