@@ -59,7 +59,7 @@ script:
   - npm install -g electron-builder
   - npm install -g popper.js
   - npm install -g jquery
-  - sudo apt install snap
+  - sudo apt update
   - sudo apt install snapd
   - sudo snap install snapcraft --classic
   - cd dist/
