@@ -15,35 +15,27 @@ before_script:
   #Cloning other repos
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
   - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
-  - rm -rf node_modules/
-  - npm i -g npm@5.7.1
   #For analytics-dash
-  - cd Ana-Analytics-Dashboard/
-  - npm install typings -g
-  - npm i @angular-devkit/core
+  - npm install @angular-devkit/core
   - npm install -g @angular/cli@1.6.1
-  - npm i node-sass
-  - npm ci
-  - ng build --prod --aot=false
-  - cd ..
+  - npm install typings -g
+  - npm i -g npm@5.7.1 Ana-Analytics-Dashboard/
+  - npm i node-sass Ana-Analytics-Dashboard/
+  - npm ci Ana-Analytics-Dashboard/
+  - npm install -g @angular/cli@1.6.1 Ana-Analytics-Dashboard/
+  - ng build --prod --aot=false Ana-Analytics-Dashboard/ Ana-Analytics-Dashboard/
   - mkdir dist2/analytics-dashboard
-  - cp -R Ana-Analytics-Dashboard/dist/* dist2/analytics-dashboard/
+  - cp -R dist/* dist2/analytics-dashboard/
   - ls -l
   - ls -l Ana-Analytics-Dashboard/
   #For Chat-Web
-  - cd ANAChat-Web/
-  - npm i node-sass
-  - npm install
-  - ng build --prod --aot=false
-  - cd ..
+  - npm install ANAChat-Web/
+  - ng build --prod --aot=false ANAChat-Web/ ANAChat-Web/
   - mkdir dist2/simulator  # For web chat
   - ls -l ANAChat-Web/
-  - cp -R ANAChat-Web/dist/* dist2/simulator/
+  - cp -R dist/* dist2/simulator/
   # For ana APP
-  - npm cache clean --force
-  - rm -rf node_modules/
-  - ls -l
-  - npm ci
+  - npm install
   - ng build --prod --aot=false
   - ls -l
   - mkdir dist/simulator
@@ -55,16 +47,16 @@ script:
   - npm install -g electron-builder
   - npm install -g popper.js
   - npm install -g jquery
-  - apt install snap
-  - apt install snapd
-  - snap install snapcraft --classic
+  - sudo apt install snap
+  - snap install snapcraft
   - cd dist/
+  - npm install
   - electron-builder
 
 notifications:
   email:
     - soumyajit.dutta@nowfloats.com
-    # - khaja.nizamuddin@nowfloats.com
+    - khaja.nizamuddin@nowfloats.com
   slack:
     on_success: always
-    on_failure: never
+    on_failure: always
