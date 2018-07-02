@@ -11,13 +11,13 @@ branches:
                   #dev branch push will triger build for non prod deployment
 install:
   - npm i -g npm@5.6.0 # this should be deleted once 5.7.X is out of "pre-release"
-  # - npm install          # instead of default npm install 
+  - npm install          # instead of default npm install 
 
 before_script:
   - mkdir dist2
-  - sudo npm install -g npm
-  - npm cache clean --force
-  - npm install 
+  # - sudo npm install -g npm
+  # - npm cache clean --force
+  # - npm install 
   - ng build --prod --aot=false
 #   #Cloning other repos
 #   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
