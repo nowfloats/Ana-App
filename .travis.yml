@@ -11,59 +11,59 @@ branches:
                   #dev branch push will triger build for non prod deployment
 install:
   - npm i -g npm@5.6.0 # this should be deleted once 5.7.X is out of "pre-release"
-  - npm install          # instead of default npm install 
+  # - npm install          # instead of default npm install 
 
-# before_script:
-#   - mkdir dist2
-#   #Cloning other repos
-#   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
-#   - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
-#   - rm -rf node_modules/
-#   #For analytics-dash
-#   - cd Ana-Analytics-Dashboard/
-#   - npm install typings -g
-#   - npm i @angular-devkit/core
-#   - npm install -g @angular/cli@1.6.1
-#   - npm i node-sass
-#   - npm install
-#   - ng build --prod --aot=false
-#   - cd ..
-#   - mkdir dist2/analytics-dashboard
-#   - cp -R Ana-Analytics-Dashboard/dist/* dist2/analytics-dashboard/
-#   - ls -l
-#   - ls -l Ana-Analytics-Dashboard/
-#   #For Chat-Web
-#   - cd ANAChat-Web/
-#   - npm i node-sass
-#   - npm install
-#   - ng build --prod --aot=false
-#   - cd ..
-#   - mkdir dist2/simulator  # For web chat
-#   - ls -l ANAChat-Web/
-#   - cp -R ANAChat-Web/dist/* dist2/simulator/
-#   # For ana APP
-#   - npm cache clean --force
-#   - rm -rf node_modules/
-#   - ls -l
-#   - npm install
-#   - ng build --prod --aot=false
-#   - ls -l
-#   - mkdir dist/simulator
-#   - mkdir dist/analytics-dashboard
-#   - cp -R dist2/simulator/* dist/simulator/
-#   - cp -R dist2/analytics-dashboard/* dist/analytics-dashboard/
+before_script:
+  - mkdir dist2
+  #Cloning other repos
+  - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
+  - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
+  - rm -rf node_modules/
+  #For analytics-dash
+  - cd Ana-Analytics-Dashboard/
+  - npm install typings -g
+  - npm i @angular-devkit/core
+  - npm install -g @angular/cli@1.6.1
+  - npm i node-sass
+  - npm install
+  - ng build --prod --aot=false
+  - cd ..
+  - mkdir dist2/analytics-dashboard
+  - cp -R Ana-Analytics-Dashboard/dist/* dist2/analytics-dashboard/
+  - ls -l
+  - ls -l Ana-Analytics-Dashboard/
+  #For Chat-Web
+  - cd ANAChat-Web/
+  - npm i node-sass
+  - npm install
+  - ng build --prod --aot=false
+  - cd ..
+  - mkdir dist2/simulator  # For web chat
+  - ls -l ANAChat-Web/
+  - cp -R ANAChat-Web/dist/* dist2/simulator/
+  # For ana APP
+  - npm cache clean --force
+  - rm -rf node_modules/
+  - ls -l
+  - npm install
+  - ng build --prod --aot=false
+  - ls -l
+  - mkdir dist/simulator
+  - mkdir dist/analytics-dashboard
+  - cp -R dist2/simulator/* dist/simulator/
+  - cp -R dist2/analytics-dashboard/* dist/analytics-dashboard/
   
-# script:
-#   - npm install -g electron-builder
-#   - npm install -g popper.js
-#   - npm install -g jquery
-#   - apt install snap
-#   - apt install snapd
-#   - snap install snapcraft --classic
-#   - cd dist/
-#   - electron-builder
+script:
+  - npm install -g electron-builder
+  - npm install -g popper.js
+  - npm install -g jquery
+  - apt install snap
+  - apt install snapd
+  - snap install snapcraft --classic
+  - cd dist/
+  - electron-builder
 
-# notifications:
-#   email:
-#     # - soumyajit.dutta@nowfloats.com
-#     # - khaja.nizamuddin@nowfloats.com
+notifications:
+  email:
+    # - soumyajit.dutta@nowfloats.com
+    # - khaja.nizamuddin@nowfloats.com
