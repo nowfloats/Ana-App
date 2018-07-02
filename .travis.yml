@@ -15,7 +15,6 @@ cache:
   directories:
   - "$HOME/.npm"
 before_script:
-  - sudo apt update
   - sudo apt-get install npm
   - mkdir dist2
   #Cloning other repos
@@ -26,7 +25,7 @@ before_script:
   - cd Ana-Analytics-Dashboard/
   - npm i npm@latest -g
   - sudo npm install typings -g
-  - npm install @angular-devkit/core
+  - sudo npm install @angular-devkit/core
   - sudo npm install -g @angular/cli@1.6.1
   - sudo npm i node-sass
   - sudo npm ci
