@@ -16,6 +16,7 @@ cache:
   - "$HOME/.npm"
 before_script:
   - sudo apt update
+  - sudo apt-get install npm
   - mkdir dist2
   #Cloning other repos
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
