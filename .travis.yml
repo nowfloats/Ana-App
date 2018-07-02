@@ -16,6 +16,7 @@ before_script:
   #Cloning other repos
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
   - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
+  - rm -rf node_modules/
   #For analytics-dash
   - cd Ana-Analytics-Dashboard/
   - sudo npm install @angular-devkit/core
