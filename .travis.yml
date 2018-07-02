@@ -47,7 +47,7 @@ before_script:
   - npm cache clean --force
   - rm -rf node_modules/
   - ls -l
-  - npm ci
+  - npm install
   - ng build --prod --aot=false
   - ls -l
   - mkdir dist/simulator
