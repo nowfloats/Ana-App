@@ -22,7 +22,7 @@ before_script:
   - sudo npm install -g @angular/cli@1.6.1
   - sudo npm install typings -g
   - sudo npm i node-sass
-  - sudo npm install
+  - sudo npm ci
   - ng build --prod --aot=false
   - cd ..
   - mkdir dist2/analytics-dashboard
