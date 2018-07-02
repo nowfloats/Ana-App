@@ -2,8 +2,8 @@ language: node_js
 node_js:
   - "node"
 
-sudo: true
-dist: trusty
+sudo: required
+dist: precise
 
 branches:
   only:
