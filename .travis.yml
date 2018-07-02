@@ -56,13 +56,16 @@ before_script:
   - cp -R dist2/analytics-dashboard/* dist/analytics-dashboard/
   
 script:
+  - cd dist/
   - npm install -g electron-builder
   - npm install -g popper.js
   - npm install -g jquery
   - sudo apt update
   - sudo apt install snapd
   - sudo snap install snapcraft --classic
-  - cd dist/
+  - snap version
+  - snap list snapcraft
+  - snapcraft --version
   - electron-builder
 
 notifications:
