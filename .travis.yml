@@ -17,26 +17,29 @@ before_script:
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
   - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
   #For analytics-dash
-  - npm install @angular-devkit/core
-  - npm install -g @angular/cli@1.6.1
-  - npm install typings -g
-  - npm i -g npm@5.7.1 Ana-Analytics-Dashboard/
-  - npm i node-sass Ana-Analytics-Dashboard/
-  - npm ci Ana-Analytics-Dashboard/
-  - npm install -g @angular/cli@1.6.1 Ana-Analytics-Dashboard/
-  - ng build --prod --aot=false Ana-Analytics-Dashboard/ Ana-Analytics-Dashboard/
+  - cd Ana-Analytics-Dashboard/
+  - sudo npm install @angular-devkit/core
+  - sudo npm install -g @angular/cli@1.6.1
+  - sudo npm install typings -g
+  - sudo npm i node-sass
+  - sudo npm install
+  - ng build --prod --aot=false
+  - cd ..
   - mkdir dist2/analytics-dashboard
-  - cp -R dist/* dist2/analytics-dashboard/
+  - cp -R Ana-Analytics-Dashboard/dist/* dist2/analytics-dashboard/
   - ls -l
   - ls -l Ana-Analytics-Dashboard/
   #For Chat-Web
-  - npm install ANAChat-Web/
-  - ng build --prod --aot=false ANAChat-Web/ ANAChat-Web/
+  - cd ANAChat-Web/
+  - sudo npm i node-sass
+  - sudo npm install
+  - ng build --prod --aot=false
+  - cd ..
   - mkdir dist2/simulator  # For web chat
   - ls -l ANAChat-Web/
-  - cp -R dist/* dist2/simulator/
+  - cp -R ANAChat-Web/dist/* dist2/simulator/
   # For ana APP
-  - npm install
+  - sudo npm install
   - ng build --prod --aot=false
   - ls -l
   - mkdir dist/simulator
@@ -53,7 +56,7 @@ script:
   - sudo snap install snapcraft --classic
   - cd dist/
   - npm install
-  - npm run release
+  - electron-builder
 
 notifications:
   email:
