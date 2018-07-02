@@ -67,4 +67,4 @@ notifications:
     # - khaja.nizamuddin@nowfloats.com
   slack:
     on_success: always
-    on_failure: always
+    on_failure: never
