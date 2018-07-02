@@ -9,12 +9,6 @@ branches:
     - travisci    #Master only builds for prod. For now changing it to Travis CI Branch
                   #dev branch push will triger build for non prod deployment
 
-install:
-- sudo apt-get install yarn
-- nvm install 6
-- yarn add electron-builder --dev
-# - npm install electron-builder@next
-
 cache:
   directories:
   - "$HOME/.npm"
