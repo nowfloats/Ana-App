@@ -1,7 +1,4 @@
-language: node_js
-node_js:
-  - "node"
-
+language: c
 sudo: true
 dist: trusty
 
@@ -9,6 +6,12 @@ branches:
   only:
     - travisci    #Master only builds for prod. For now changing it to Travis CI Branch
                   #dev branch push will triger build for non prod deployment
+
+install:
+- nvm install 6
+- npm install electron-builder@next
+- npm install
+- npm prune
 
 before_script:
   - sudo apt update
