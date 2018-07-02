@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "node"
 
-sudo: required
+sudo: true
 dist: trusty
 
 branches:
@@ -10,12 +10,9 @@ branches:
     - travisci    #Master only builds for prod. For now changing it to Travis CI Branch
                   #dev branch push will triger build for non prod deployment
 
-install:
-  - yarn
 before_script:
   - sudo apt update
   - mkdir dist2
-  - yarn add electron-builder -g
   #Cloning other repos
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
   - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
@@ -48,7 +45,7 @@ before_script:
   - cp -R dist2/analytics-dashboard/* dist/analytics-dashboard/
   
 script:
-  - npm install -g electron-builder@next
+  - npm install -g electron-builder
   - npm install -g popper.js
   - npm install -g jquery
   - sudo apt install snap
@@ -56,9 +53,8 @@ script:
   - sudo snap install snapcraft --classic
   - cd dist/
   - npm install
-  - npm prune
-  # - electron-builder
   - npm run release
+
 notifications:
   email:
     - soumyajit.dutta@nowfloats.com
