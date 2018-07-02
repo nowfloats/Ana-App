@@ -10,6 +10,7 @@ branches:
                   #dev branch push will triger build for non prod deployment
 
 install:
+- nvm install v8.11.3
 - npm install electron-builder@next
 
 cache:
