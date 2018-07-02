@@ -9,33 +9,43 @@ branches:
   only:
     - travisci    #Master only builds for prod. For now changing it to Travis CI Branch
                   #dev branch push will triger build for non prod deployment
+install:
+  - npm i -g npm@5.7.1 # this should be deleted once 5.7.X is out of "pre-release"
+  - npm ci             # instead of default npm install 
 
 before_script:
   - mkdir dist2
   #Cloning other repos
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
   - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
+  - rm -rf node_modules/
   #For analytics-dash
-  - npm install @angular-devkit/core
-  - npm install -g @angular/cli@1.6.1
+  - cd Ana-Analytics-Dashboard/
   - npm install typings -g
-  - npm i -g npm@5.7.1 Ana-Analytics-Dashboard/
-  - npm i node-sass Ana-Analytics-Dashboard/
-  - npm ci Ana-Analytics-Dashboard/
-  - npm install -g @angular/cli@1.6.1 Ana-Analytics-Dashboard/
-  - ng build --prod --aot=false Ana-Analytics-Dashboard/ Ana-Analytics-Dashboard/
+  - npm i @angular-devkit/core
+  - npm install -g @angular/cli@1.6.1
+  - npm i node-sass
+  - npm ci
+  - ng build --prod --aot=false
+  - cd ..
   - mkdir dist2/analytics-dashboard
-  - cp -R dist/* dist2/analytics-dashboard/
+  - cp -R Ana-Analytics-Dashboard/dist/* dist2/analytics-dashboard/
   - ls -l
   - ls -l Ana-Analytics-Dashboard/
   #For Chat-Web
-  - npm install ANAChat-Web/
-  - ng build --prod --aot=false ANAChat-Web/ ANAChat-Web/
+  - cd ANAChat-Web/
+  - npm i node-sass
+  - npm install
+  - ng build --prod --aot=false
+  - cd ..
   - mkdir dist2/simulator  # For web chat
   - ls -l ANAChat-Web/
-  - cp -R dist/* dist2/simulator/
+  - cp -R ANAChat-Web/dist/* dist2/simulator/
   # For ana APP
-  - npm install
+  - npm cache clean --force
+  - rm -rf node_modules/
+  - ls -l
+  - npm ci
   - ng build --prod --aot=false
   - ls -l
   - mkdir dist/simulator
@@ -47,16 +57,16 @@ script:
   - npm install -g electron-builder
   - npm install -g popper.js
   - npm install -g jquery
-  - sudo apt install snap
-  - snap install snapcraft
+  - apt install snap
+  - apt install snapd
+  - snap install snapcraft --classic
   - cd dist/
-  - npm install
   - electron-builder
 
 notifications:
   email:
     - soumyajit.dutta@nowfloats.com
-    - khaja.nizamuddin@nowfloats.com
+    # - khaja.nizamuddin@nowfloats.com
   slack:
     on_success: always
-    on_failure: always
+    on_failure: never
