@@ -1,4 +1,4 @@
-language: c
+language: node
 sudo: true
 dist: trusty
 
