@@ -27,7 +27,7 @@ before_script:
   - cd Ana-Analytics-Dashboard/
   - npm i npm@latest -g
   - sudo npm install typings -g
-  - sudo npm install @angular-devkit/core << "yes\n"
+  - npm i @angular-devkit/core
   - sudo npm install -g @angular/cli@1.6.1
   - sudo npm i node-sass
   - sudo npm ci
