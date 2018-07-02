@@ -19,6 +19,7 @@ before_script:
   - rm -rf node_modules/
   #For analytics-dash
   - cd Ana-Analytics-Dashboard/
+  - npm i -g npm@5.7.1
   - sudo npm install @angular-devkit/core
   - sudo npm install -g @angular/cli@1.6.1
   - sudo npm install typings -g
@@ -62,7 +63,7 @@ script:
 notifications:
   email:
     - soumyajit.dutta@nowfloats.com
-    - khaja.nizamuddin@nowfloats.com
+    # - khaja.nizamuddin@nowfloats.com
   slack:
     on_success: always
     on_failure: always
