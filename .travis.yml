@@ -11,7 +11,7 @@ branches:
                   #dev branch push will triger build for non prod deployment
 install:
   - npm i -g npm@5.6.0 # this should be deleted once 5.7.X is out of "pre-release"
-  - npm ci             # instead of default npm install 
+  - npm install          # instead of default npm install 
 
 before_script:
   - mkdir dist2
@@ -25,7 +25,7 @@ before_script:
   - npm i @angular-devkit/core
   - npm install -g @angular/cli@1.6.1
   - npm i node-sass
-  - npm ci
+  - npm install
   - ng build --prod --aot=false
   - cd ..
   - mkdir dist2/analytics-dashboard
@@ -45,7 +45,7 @@ before_script:
   - npm cache clean --force
   - rm -rf node_modules/
   - ls -l
-  - npm ci
+  - npm install
   - ng build --prod --aot=false
   - ls -l
   - mkdir dist/simulator
