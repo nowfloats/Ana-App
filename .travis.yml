@@ -10,11 +10,11 @@ branches:
     - travisci    #Master only builds for prod. For now changing it to Travis CI Branch
                   #dev branch push will triger build for non prod deployment
 install:
-  - sudo npm cache clean --force
-  - sudo npm ci
+- sudo npm cache clean --force
+- sudo npm ci
   # keep the npm cache around to speed up installs
-  cache:
-    directories:
+cache:
+  directories:
   - "$HOME/.npm"
 before_script:
   - sudo apt update
