@@ -15,6 +15,7 @@ cache:
   directories:
   - "$HOME/.npm"
 before_script:
+  - 'echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config'
   - sudo apt-get install npm
   - npm config set strict-ssl false
   - mkdir dist2
