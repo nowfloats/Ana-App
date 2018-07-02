@@ -11,8 +11,8 @@ branches:
 
 install:
 - apt-get install yarn
-- yarn add electron-builder --dev
 - nvm install 6
+- yarn add electron-builder --dev
 # - npm install electron-builder@next
 
 cache:
