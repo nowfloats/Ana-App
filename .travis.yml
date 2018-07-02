@@ -24,7 +24,7 @@ before_script:
   - rm -rf node_modules/
   #For analytics-dash
   - cd Ana-Analytics-Dashboard/
-  - npm i -g npm@5.7.1
+  - npm i npm@latest -g
   - npm install @angular-devkit/core
   - sudo npm install -g @angular/cli@1.6.1
   - sudo npm install typings -g
