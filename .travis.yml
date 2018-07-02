@@ -10,8 +10,10 @@ branches:
                   #dev branch push will triger build for non prod deployment
 
 install:
+- apt-get install yarn
+- yarn add electron-builder --dev
 - nvm install 6
-- npm install electron-builder@next
+# - npm install electron-builder@next
 
 cache:
   directories:
