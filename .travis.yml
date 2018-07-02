@@ -23,7 +23,7 @@ before_script:
   - npm i @angular-devkit/core
   - npm install -g @angular/cli@1.6.1
   - npm i node-sass
-  - npm install
+  - npm ci
   - ng build --prod --aot=false
   - cd ..
   - mkdir dist2/analytics-dashboard
@@ -43,7 +43,7 @@ before_script:
   - npm cache clean --force
   - rm -rf node_modules/
   - ls -l
-  - npm install
+  - npm ci
   - ng build --prod --aot=false
   - ls -l
   - mkdir dist/simulator
@@ -59,7 +59,6 @@ script:
   - apt install snapd
   - snap install snapcraft --classic
   - cd dist/
-  - npm install
   - electron-builder
 
 notifications:
