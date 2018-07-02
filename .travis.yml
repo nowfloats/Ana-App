@@ -47,6 +47,7 @@ before_script:
   - ls -l ANAChat-Web/
   - cp -R ANAChat-Web/dist/* dist2/simulator/
   # For ana APP
+  - npm cache clean
   - npm install
   - ng build --prod --aot=false
   - ls -l
