@@ -2,16 +2,14 @@ language: node_js
 node_js:
   - "node"
 
-sudo: true
+sudo: required
 dist: trusty
 
 branches:
   only:
     - travisci    #Master only builds for prod. For now changing it to Travis CI Branch
                   #dev branch push will triger build for non prod deployment
-install:
-  - npm
-  
+
 before_script:
   - sudo apt update
   - mkdir dist2
