@@ -11,6 +11,7 @@ branches:
                   #dev branch push will triger build for non prod deployment
 
 before_script:
+  - sudo apt update
   - mkdir dist2
   #Cloning other repos
   - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
