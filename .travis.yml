@@ -12,6 +12,9 @@ branches:
 install:
   - npm i -g npm@5.6.0 # this should be deleted once 5.7.X is out of "pre-release"
   - npm install          # instead of default npm install 
+  - npm i @angular-devkit/core
+  - npm install -g @angular/cli@1.6.1
+  - npm i node-sass
 
 before_script:
   - mkdir dist2
