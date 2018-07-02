@@ -48,6 +48,7 @@ script:
   - npm install -g popper.js
   - npm install -g jquery
   - sudo apt install snap
+  - sudo apt install snapd
   - snap install snapcraft
   - cd dist/
   - npm install
