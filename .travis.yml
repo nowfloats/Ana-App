@@ -25,7 +25,7 @@ before_script:
   #For analytics-dash
   - cd Ana-Analytics-Dashboard/
   - npm i -g npm@5.7.1
-  - sudo npm install @angular-devkit/core
+  - npm install @angular-devkit/core
   - sudo npm install -g @angular/cli@1.6.1
   - sudo npm install typings -g
   - sudo npm i node-sass
