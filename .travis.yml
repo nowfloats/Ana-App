@@ -1,6 +1,8 @@
 language: node
 sudo: true
 dist: trusty
+node_js:
+  - "node"
 
 branches:
   only:
