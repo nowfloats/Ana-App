@@ -1,7 +1,7 @@
  # The Ana App
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
-https://travis-ci.org/Kitsune-tools/Ana-App.svg?branch=travisci
+[![Build Status](https://travis-ci.org/Kitsune-tools/Ana-App.svg?branch=travisci)](https://travis-ci.org/Kitsune-tools/Ana-App)
 
 A single cross-platform app where you can design and publish Ana chatbots, manage users and check the chatbot analytics.
 
