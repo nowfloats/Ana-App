@@ -76,5 +76,5 @@ script:
 
 notifications:
   email:
-    # - soumyajit.dutta@nowfloats.com
-    # - khaja.nizamuddin@nowfloats.com
+    - soumyajit.dutta@nowfloats.com
+    - khaja.nizamuddin@nowfloats.com
