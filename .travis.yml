@@ -60,7 +60,7 @@ script:
   - sudo add-apt-repository ppa:snappy-dev/tools -y
   - sudo apt update
   - sudo apt-get install --no-install-recommends yarn
-  - yarn add electron-builder --dev
+  - yarn add electron-builder@19.56.0 --dev
   # - npm install -g electron-builder
   - npm install -g popper.js
   - npm install -g jquery
