@@ -35,7 +35,7 @@ install:
   - ng build --prod --aot=false
   - cd ..
   - mkdir dist2\analytics-dashboard
-  - cp -R Ana-Analytics-Dashboard\dist\* dist2\analytics-dashboard\
+  - cp -R Ana-Analytics-Dashboard/dist/* dist2/analytics-dashboard/
   - ls -l
   - ls -l Ana-Analytics-Dashboard\
   #For Chat-Web
@@ -46,7 +46,7 @@ install:
   - cd ..
   - mkdir dist2\simulator  # For web chat
   - ls -l ANAChat-Web\
-  - cp -R ANAChat-Web\dist\* dist2\simulator\
+  - cp -R ANAChat-Web/dist/* dist2/simulator/
   # For ana APP
   - npm cache verify
   - npm install -g npm@5.6.0
@@ -54,8 +54,8 @@ install:
   - ls -l
   - mkdir dist\simulator
   - mkdir dist\analytics-dashboard
-  - cp -R dist2\simulator\* dist\simulator\
-  - cp -R dist2\analytics-dashboard\* dist\analytics-dashboard\
+  - cp -R dist2/simulator/* dist/simulator/
+  - cp -R dist2/analytics-dashboard/* dist/analytics-dashboard/
   - cd dist
   - yarn add electron-builder@19.56.0 --dev
   # - npm install -g electron-builder
