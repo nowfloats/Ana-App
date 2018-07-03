@@ -73,8 +73,6 @@ test_script:
 cache:
   - 'node_modules -> package.json'
 
-build: on
-
 notifications:
   - provider: Email
     to:
