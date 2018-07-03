@@ -15,8 +15,6 @@ install:
   - IF %nodejs_version% LSS 4 npm -g install npm@2
   - IF %nodejs_version% EQU 5 npm -g install npm@3
   - set PATH=%APPDATA%\npm;%PATH%
-
-build:
   - npm install
   - npm i @angular-devkit/core
   - npm install -g @angular/cli@1.6.1
@@ -70,8 +68,11 @@ test_script:
   # Output useful info for debugging.
   - node --version && npm --version
 
+build: off
+
 cache:
   - 'node_modules -> package.json'
+
 
 notifications:
   - provider: Email
