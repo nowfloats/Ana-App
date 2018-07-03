@@ -36,14 +36,16 @@ import {
 	MatToolbarModule,
 	ErrorStateMatcher,
 	ShowOnDirtyErrorStateMatcher,
-	MatAutocompleteModule
+	MatAutocompleteModule,
+	MatChipsModule,
+	MatSlideToggleModule,
+	MatRadioModule
 } from '@angular/material';
 import { NgxElectronModule } from 'ngx-electron';
 
 import { EllipsisPipe } from './pipes/ellipsis.pipe';
 
 import { AppComponent } from './app.component';
-
 import { ChatFlowService } from './services/chatflow.service';
 import { GlobalsService } from './services/globals.service';
 import { SettingsService } from './services/settings.service';
@@ -58,9 +60,13 @@ import { ChangePasswordComponent } from './components/shared/change-password/cha
 import { LoadingMaskComponent } from './components/shared/loading-mask/loading-mask.component';
 import { CreateChatbotComponent } from './components/shared/create-chatbot/create-chatbot.component';
 import { PublishChatbotComponent } from './components/shared/publish-chatbot/publish-chatbot.component';
-import { AnalyticsPickerComponent } from './components/shared/analytics-picker/analytics-picker.component';
 import { AnalyticsWindowService } from './services/analytics-window.service';
-
+import { HotkeyModule } from 'angular2-hotkeys';
+import { BusinessPickerComponent } from './components/shared/business-picker/business-picker.component';
+import { AnaCloudSignupComponent } from './components/shared/ana-cloud-signup/ana-cloud-signup.component';
+import { AutofocusDirective } from './directives/autofocus.directive';
+import { HighlightJsModule } from 'angular2-highlight-js';
+import { ClipboardModule } from 'ngx-clipboard';
 const MAT_MODULES: any[] = [
 	MatButtonModule,
 	MatMenuModule,
@@ -80,7 +86,10 @@ const MAT_MODULES: any[] = [
 	MatListModule,
 	MatToolbarModule,
 	MatGridListModule,
-	MatAutocompleteModule
+	MatAutocompleteModule,
+	MatChipsModule,
+	MatSlideToggleModule,
+	MatRadioModule
 ];
 
 const IMPORT_EXPORT: any[] = [
@@ -89,7 +98,10 @@ const IMPORT_EXPORT: any[] = [
 	HttpClientModule,
 	FormsModule,
 	ReactiveFormsModule,
-	NgxElectronModule
+	NgxElectronModule,
+	HotkeyModule,
+	HighlightJsModule,
+	ClipboardModule,
 ].concat(MAT_MODULES);
 
 const DECLARATIONS: any[] = [
@@ -107,7 +119,9 @@ const DECLARATIONS: any[] = [
 	GetAnaChatServerComponent,
 	CreateChatbotComponent,
 	PublishChatbotComponent,
-	AnalyticsPickerComponent,
+	BusinessPickerComponent,
+	AnaCloudSignupComponent,
+	AutofocusDirective,
 	EllipsisPipe
 ]
 
@@ -142,7 +156,8 @@ const DECLARATIONS: any[] = [
 		GetAnaChatServerComponent,
 		CreateChatbotComponent,
 		PublishChatbotComponent,
-		AnalyticsPickerComponent
+		BusinessPickerComponent,
+		AnaCloudSignupComponent
 	]
 })
 export class SharedModule { }

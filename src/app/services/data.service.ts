@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { InfoDialogService } from './info-dialog.service';
 import { ChatServerConnection, ChatBotProject } from '../models/app.models';
-import { LoginData, APIResponse, ListContent, BusinessAccount, BusinessAccountStatus, ErrorItem, Role, ListData, UserRegisterModel, User, ChatProject } from '../models/data.models';
+import { LoginData, APIResponse, ListContent, BusinessAccount, BusinessAccountStatus, ErrorItem, Role, ListData, UserRegisterModel, User, ChatProject, RegisterOnAnaCloudDetails } from '../models/data.models';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class DataService {
@@ -25,6 +26,10 @@ export class DataService {
 		if (!this.conn || !this.conn.ServerUrl)
 			return "";
 		return this.conn.ServerUrl + "analytics";
+	}
+
+	get chatServer() {
+		return this.conn;
 	}
 
 	isSuperAdmin() {
@@ -70,9 +75,9 @@ export class DataService {
 			.map(x => x as APIResponse<Role[]>);
 	}
 
-	getBusinessAccounts(page: number = 0, size: number = 10) {
+	getBusinessAccounts(searchText: string = "", page: number = 0, size: number = 10) {
 		let h = this.getHeaders();
-		return this.http.get(`${this.conn.ServerUrl}business/accounts?page=${page}&size=${size}`, { headers: h })
+		return this.http.get(`${this.conn.ServerUrl}business/accounts?searchText=${encodeURIComponent(searchText)}&page=${page}&size=${size}`, { headers: h })
 			.map(x => x as APIResponse<ListContent<BusinessAccount>>);
 	}
 
@@ -111,6 +116,16 @@ export class DataService {
 			.map(x => x as APIResponse<ChatProject>);
 	}
 
+	registerOnAnaCloud(request: RegisterOnAnaCloudDetails) {
+		let h = this.getHeaders();
+		let serverUrl = "http://gateway.api.dev.ana.chat/";
+		if (environment.production) {
+			serverUrl = "http://gateway.api.ana.chat/";
+		}
+		return this.http.post(`${serverUrl}business/accounts/publicRegister`, request, { headers: h })
+			.map(x => x as APIResponse<RegisterOnAnaCloudDetails>);
+	}
+
 	saveChatProject(chatProject: ChatProject) {
 		let h = this.getHeaders();
 
@@ -125,9 +140,9 @@ export class DataService {
 
 	}
 
-	getUsers(bizid: string, page: number = 0, size: number = 10) {
+	getUsers(bizid: string, searchText: string = "", page: number = 0, size: number = 10) {
 		let h = this.getHeaders();
-		return this.http.get(`${this.conn.ServerUrl}auth/users?page=${page}&size=${size}&businessId=${bizid}`, { headers: h })
+		return this.http.get(`${this.conn.ServerUrl}auth/users?searchText=${encodeURIComponent(searchText)}&page=${page}&size=${size}&businessId=${bizid}`, { headers: h })
 			.map(x => x as ListContent<User>);
 	}
 
@@ -217,6 +232,4 @@ export class DataService {
 		}
 		this.infoDialog.alert(title, msg);
 	}
-
-
 }

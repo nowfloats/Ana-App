@@ -1,9 +1,9 @@
 {
   "name": "ana-conversation-studio",
-  "version": "0.1.6-beta.1",
+  "version": "0.1.8",
   "main": "electron.js",
   "author": "Team Ana",
-  "description": "The Ana app, contains Ana studio, user management, analytics and chatbot publishing",
+  "description": "The Ana app, contains Ana studio, user management, analytics and chatbot publishing.",
   "homepage": "http://ana.chat",
   "license": "GNU-GPLv3",
   "build": {
@@ -16,22 +16,47 @@
     },
     "mac": {
       "icon": "favicon.icns",
-      "category": "public.app-category.graphics-design"
+      "category": "public.app-category.graphics-design",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
     },
     "win": {
-      "icon": "favicon.ico"
+      "icon": "favicon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
     "linux": {
       "category": "Graphics",
-      "icon": "favicon"
+      "icon": "favicon",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
     },
-    "electronVersion": "1.8.2-beta.3",
+    "electronVersion": "1.8.2",
     "publish": {
       "provider": "generic",
       "url": "https://cdn.ana.chat/dist/ana-app/${os}-${arch}"
     }
   },
   "dependencies": {
-    "electron-updater": "^2.18.2"
+    "electron-updater": "^2.20.1"
   }
 }

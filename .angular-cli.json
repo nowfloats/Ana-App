@@ -24,15 +24,18 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
+        "../node_modules/highlightjs/styles/atom-one-dark.css",
         "theme.scss",
         "styles.css"
       ],
       "scripts": [
+        "../node_modules/highlightjs/highlight.pack.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
-        "prod": "environments/environment.prod.ts"
+        "prod": "environments/environment.prod.ts",
+        "local": "environments/environment.local.ts"
       }
     }
   ],
@@ -62,6 +65,8 @@
   },
   "defaults": {
     "styleExt": "css",
-    "component": {}
+    "component": {
+      "spec": false
+    }
   }
 }

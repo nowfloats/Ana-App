@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, HostListener } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, HostListener, OnDestroy } from '@angular/core';
 import { Http } from '@angular/http';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
@@ -7,7 +7,7 @@ import { SettingsService } from '../../../services/settings.service'
 import { GlobalsService } from '../../../services/globals.service'
 import * as models from '../../../models/chatflow.models';
 import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 
 import { ObjectID } from 'bson';
 import { InfoDialogService } from '../../../services/info-dialog.service';
@@ -15,26 +15,33 @@ import { SimulatorFrameComponent } from '../simulator-frame/simulator-frame.comp
 import { SimulatorService } from '../../../services/simulator.service';
 import { PublishChatbotComponent } from '../../shared/publish-chatbot/publish-chatbot.component';
 import { PublishDialogComponent } from '../../shared/publish-dialog/publish-dialog.component';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { LoginService } from '../../../services/login.service';
+import { DataService } from '../../../services/data.service';
+import { BusinessPickerComponent, BusinessPickerParam, ChoosenBizAccChatProj } from '../../shared/business-picker/business-picker.component';
+import { BusinessAccount } from '../../../models/data.models';
 
 @Component({
 	selector: 'app-chatflow',
 	templateUrl: './chatflow.component.html',
 	styleUrls: ['./chatflow.component.css'],
 })
-export class ChatFlowComponent implements OnInit {
-
+export class ChatFlowComponent implements OnInit, OnDestroy {
 	constructor(
 		private chatFlowService: ChatFlowService,
 		public dialog: MatDialog,
 		public infoDialog: InfoDialogService,
 		public route: ActivatedRoute,
 		public router: Router,
+		public dataService: DataService,
+		private loginService: LoginService,
 		public snakbar: MatSnackBar,
+		private hotkeys: HotkeysService,
 		public globalsService: GlobalsService,
 		public simulatorService: SimulatorService,
 		public settings: SettingsService) {
 
-		this.chatFlowNetwork = new ChatFlowNetwork(this, this.infoDialog);
+		this.chatFlowNetwork = new ChatFlowNetwork(this, this.infoDialog, this.snakbar);
 		this.chatFlowNetwork.newChatNodeConnection.isHidden = true;
 		this._viewBoxX = 0;
 		this._viewBoxY = 0;
@@ -67,10 +74,131 @@ export class ChatFlowComponent implements OnInit {
 					this.router.navigateByUrl('/studio');
 			}
 		});
+		this.bindDesignerShortcuts();
+	}
+
+	ngOnDestroy(): void {
+		this.unbindDesignerShortcuts();
 	}
 
 	chatFlowRootSVG() {
 		return this.chatflowRoot.nativeElement as SVGSVGElement;
+	}
+
+	keymapOnDesigner: Hotkey[] = [
+		new Hotkey(["command+s", "ctrl+s"], (e, s) => {
+			this.saveChatFlow();
+			return false;
+		}, [], "Save the chat flow"),
+		new Hotkey(["command+r", "ctrl+r"], (e, s) => {
+			this.playChatFlow();
+			return false;
+		}, [], "Run the chat"),
+		new Hotkey("n", (e, s) => {
+			this.addNewNode();
+			return false;
+		}, [], "Add a new node"),
+		new Hotkey("c", (e, s) => {
+			this.cloneSelectedNodes();
+			return false;
+		}, [], "Clone selected nodes"),
+		new Hotkey("esc", (e, s) => {
+			this.clearSelection();
+			return false;
+		}, [], "Clear selection"),
+		new Hotkey("del", (e, s) => {
+			this.deleteSelectedNodes();
+			return false;
+		}, [], "Delete selected nodes"),
+		new Hotkey("alt+f", (e, s) => {
+			this.fitViewToAllNodes();
+			return false;
+		}, [], "Fit to screen"),
+		new Hotkey("alt+w", (e, s) => {
+			this.gotoStartup();
+			return false;
+		}, [], "Close the designer")
+	];
+
+	@HostListener('document:keydown', ['$event'])
+	documentKeyDown(event: KeyboardEvent) {
+		if (event.keyCode == 17) {
+			this.ctrlDown = true;
+		}
+	}
+
+	@HostListener('document:keyup', ['$event'])
+	documentKeyUp(event: KeyboardEvent) {
+		if (event.keyCode == 17) {
+			this.ctrlDown = false;
+		}
+	}
+	ctrlDown: boolean;
+
+	bindDesignerShortcuts() {
+		this.unbindDesignerShortcuts();
+		this.keymapOnDesigner.forEach(x => this.hotkeys.add(x));
+	}
+
+	unbindDesignerShortcuts() {
+		this.keymapOnDesigner.forEach(x => this.hotkeys.remove(x));
+	}
+
+	deleteSelectedNodes() {
+		let selectedNodes = this.chatFlowNetwork.selectedNodes();
+		if (!selectedNodes || selectedNodes.length <= 0) {
+			return;
+		}
+		let title = `Delete ${selectedNodes.length} nodes?`;
+		let message = `Are you sure, you want to delete ${selectedNodes.length} selected nodes?`;
+		if (selectedNodes.length == 1) {
+			let selectedNode = selectedNodes[0];
+			let name = this.MH.chatNodeAlias(selectedNode.chatNode);
+			title = `Delete '${name}' node?`;
+			message = `Are you sure, you want to delete ${name} nodes?`;
+		}
+		this.infoDialog.confirm(title, message, (ok) => {
+			if (ok) {
+				this.deleteMultipleNodes(selectedNodes);
+			}
+		});
+	}
+
+	clearSelection() {
+		this.chatFlowNetwork.chatNodeVMs.forEach(x => {
+			x.isSelected = false;
+		});
+	}
+
+	cloneSelectedNodes() {
+		let selectedNodes = this.chatFlowNetwork.selectedNodes();
+		if (!selectedNodes || selectedNodes.length <= 0) {
+			return;
+		}
+
+		selectedNodes.forEach(node => {
+			let cloneNode = this.globalsService.cloneNode(node.chatNode);
+			if (!cloneNode)
+				return;
+			let newNodeVM = new ChatNodeVM(this.chatFlowNetwork, cloneNode, this.snakbar);
+			newNodeVM._x = node._x + 100;
+			newNodeVM._y = node._y + 100;
+			newNodeVM._layoutUpdated = true; //To skip the loading indicator
+		});
+
+		this.chatFlowNetwork.updateChatNodeConnections();
+		this.updateLayout();
+	}
+
+	deleteMultipleNodes(nodesVMs: ChatNodeVM[]) {
+		for (let i = 0; i < nodesVMs.length; i++) {
+			let nodeVM = nodesVMs[i];
+			var elementIdxToDel = this.chatFlowNetwork.chatNodeVMs.findIndex(x => x.chatNode.Id == nodeVM.chatNode.Id);
+			this.chatFlowNetwork.chatNodeVMs.splice(elementIdxToDel, 1);
+		}
+
+		this.chatFlowNetwork.updateChatNodeConnections();
+		this.chatFlowNetwork.parent.updateLayout();
 	}
 
 	updateLayout() {
@@ -132,6 +260,18 @@ export class ChatFlowComponent implements OnInit {
 				let offset = this.chatFlowNetwork.draggingChatNodeOffset;
 				this.chatFlowNetwork.draggingChatNode._x = targetXY.x - offset.x;
 				this.chatFlowNetwork.draggingChatNode._y = targetXY.y - offset.y;
+
+				let selectedNodes = this.chatFlowNetwork.selectedNodes();
+				if (selectedNodes && selectedNodes.length > 0) {
+					for (var i = 0; i < selectedNodes.length; i++) {
+						let thisNode = selectedNodes[i];
+						let thisOffset = this.chatFlowNetwork.selectedNodeOffsets[thisNode.chatNode.Id];
+						if (thisOffset) {
+							thisNode._x = targetXY.x - thisOffset.x;
+							thisNode._y = targetXY.y - thisOffset.y;
+						}
+					}
+				}
 			} catch (e) {
 				this.chatFlowNetwork.draggingChatNode._x += event.movementX;
 				this.chatFlowNetwork.draggingChatNode._y += event.movementY;
@@ -274,15 +414,19 @@ export class ChatFlowComponent implements OnInit {
 			this._viewBoxWidth = Config.maxZoomWidth;
 		if (this._viewBoxHeight < Config.maxZoomHeight)
 			this._viewBoxHeight = Config.maxZoomHeight;
-
-		//console.log('designerWheel: ');
-		//console.log(this._viewBoxWidth + "," + this._viewBoxHeight);
 	}
 
 	openEditor(chatNodeVM: ChatNodeVM) {
 		let dialogRef = this.dialog.open(NodeEditorComponent, {
-			width: '80%',
+			width: '60%',
+			backdropClass: 'dark-overlay',
 			data: chatNodeVM.chatNode
+		});
+		dialogRef.afterOpen().subscribe(x => {
+			this.unbindDesignerShortcuts();
+		});
+		dialogRef.afterClosed().subscribe(x => {
+			this.bindDesignerShortcuts();
 		});
 	}
 
@@ -293,7 +437,7 @@ export class ChatFlowComponent implements OnInit {
 			Buttons: [],
 			Sections: [],
 			NodeType: models.NodeType.Combination,
-		});
+		}, this.snakbar);
 
 		newNodeVM._x = (this._viewBoxX + (this._viewBoxWidth / 2)) + (Math.random() * 50);
 		newNodeVM._y = (this._viewBoxY + (this._viewBoxHeight / 2)) + (Math.random() * 50);
@@ -317,7 +461,7 @@ export class ChatFlowComponent implements OnInit {
 			this.chatFlowNetwork.chatNodeVMs = [];
 
 			pack.ChatNodes.forEach(cn => {
-				new ChatNodeVM(this.chatFlowNetwork, cn);
+				new ChatNodeVM(this.chatFlowNetwork, cn, this.snakbar);
 
 				cn.Buttons.forEach(btn => {
 					btn.AdvancedOptions = ((btn.VariableValue || btn.ConditionMatchKey || btn.ConditionMatchValue || btn.ConditionOperator) ? true : false);
@@ -399,9 +543,41 @@ export class ChatFlowComponent implements OnInit {
 	}
 
 	openPublishDialog() {
-		this.dialog.open(PublishDialogComponent, {
-			width: '60%',
-			data: this.saveChatFlow()
+
+		this.infoDialog.showSpinner();
+		this.loginService.performLogin(false, null, true, (done) => {
+			this.infoDialog.hideSpinner();
+
+			if (this.dataService.loggedInUser) {
+				if (this.dataService.isBizAdmin() || this.dataService.isFlowManager()) {
+					this.dialog.open(PublishChatbotComponent, {
+						width: 'auto',
+						data: {
+							pack: this.saveChatFlow(),
+							bizId: this.dataService.loggedInUser.businessId
+						}
+					});
+				} else {
+					let d = this.dialog.open(BusinessPickerComponent, {
+						width: "30%",
+						data: <BusinessPickerParam>{
+							askFlowId: false
+						}
+					});
+					d.afterClosed().subscribe((x: ChoosenBizAccChatProj) => {
+						if (x && x.bizAccount) {
+							let ba = x.bizAccount;
+							this.dialog.open(PublishChatbotComponent, {
+								width: 'auto',
+								data: {
+									pack: this.saveChatFlow(),
+									bizId: ba.id
+								}
+							});
+						}
+					});
+				}
+			}
 		});
 	}
 
@@ -417,7 +593,8 @@ export class ChatFlowComponent implements OnInit {
 class ChatFlowNetwork {
 	constructor(
 		public parent: ChatFlowComponent,
-		public infoDialog: InfoDialogService) {
+		public infoDialog: InfoDialogService,
+		public snackbar: MatSnackBar) {
 	}
 
 	updateChatNodeConnections(): void {
@@ -428,7 +605,7 @@ class ChatFlowNetwork {
 				if (srcBtn.NextNodeId != null || srcBtn.NextNodeId != "") {
 					let destNode = this.chatNodeVMs.filter(x => x.chatNode.Id == srcBtn.NextNodeId);
 					if (destNode && destNode.length > 0)
-						this.chatNodeConnections.push(new ChatNodeConnection(new ChatButtonConnector(chatNodeVM, srcBtn), destNode[0], this.infoDialog));
+						this.chatNodeConnections.push(new ChatNodeConnection(new ChatButtonConnector(chatNodeVM, srcBtn, this.snackbar), destNode[0], this.infoDialog));
 				}
 			});
 		});
@@ -438,9 +615,20 @@ class ChatFlowNetwork {
 	chatNodeVMs: ChatNodeVM[] = [];
 	chatFlowPack: models.ChatFlowPack;
 
+	selectedNodes() {
+		return this.chatNodeVMs.filter(x => x.isSelected);
+	}
+
 	newChatNodeConnection: ChatNodeNewConnection = new ChatNodeNewConnection();
 	draggingChatNode: ChatNodeVM;
 	draggingChatNodeOffset: Point;
+
+	selectedNodeOffsets: {
+		[nodeId: string]: Point;
+	} = {};
+
+	clickConnectionStartButton: ChatButtonConnector;
+	clickConnectionStartSnackbar: MatSnackBarRef<SimpleSnackBar>;
 }
 
 class ChatNodeConnection {
@@ -490,7 +678,10 @@ class ChatNodeConnection {
 		return `M${this.srcConnectorX()},${this.srcConnectorY()} 
                 C${this.calcSrcTangentX()},${this.calcSrcTangentY()} 
                   ${this.calcDestTangentX()},${this.calcDestTangentY()} 
-                ${this.destConnectorX()},${this.destConnectorY()}`;
+                ${this.destConnectorX()},${this.destConnectorY()} M${this.srcConnectorX()},${this.srcConnectorY()} 
+                C${this.calcSrcTangentX()},${this.calcSrcTangentY()} 
+                  ${this.calcDestTangentX()},${this.calcDestTangentY()} 
+                ${this.destConnectorX()},${this.destConnectorY()}`; //double path to render connections with hollow shapes
 	}
 
 	closeButtonVisible = false;
@@ -501,7 +692,7 @@ class ChatNodeConnection {
 		this.closeButtonPointX = xy.x; //some offset from the cursor
 		this.closeButtonPointY = xy.y; //some offset from the cursor
 		this.closeButtonVisible = true;
-		//alert(`${this.closeButtonPoint.x},${this.closeButtonPoint.y}`);
+
 		setTimeout(() => {
 			this.closeButtonVisible = false;
 		}, 50000); //Hide the close button after 5secs
@@ -577,7 +768,8 @@ class ChatNodeNewConnection {
 class ChatButtonConnector {
 	constructor(
 		public chatNodeVM: ChatNodeVM,
-		public button: models.Button) {
+		public button: models.Button,
+		public snackbar: MatSnackBar) {
 	}
 
 	x() {
@@ -620,6 +812,20 @@ class ChatButtonConnector {
 		this.chatNodeVM.network.updateChatNodeConnections();
 	}
 
+	startDirectConnection(event: MouseEvent) {
+		this.chatNodeVM.network.clickConnectionStartButton = this;
+
+		if (this.chatNodeVM.network.clickConnectionStartSnackbar) {
+			this.chatNodeVM.network.clickConnectionStartSnackbar.dismiss();
+			this.chatNodeVM.network.clickConnectionStartSnackbar = null;
+		}
+
+		this.chatNodeVM.network.clickConnectionStartSnackbar = this.snackbar.open(`Connection started at button '${this.button.ButtonName}' of node '${this.chatNodeVM.chatNode.Name}'. Click on the target node to connect.`, 'Abort');
+		this.chatNodeVM.network.clickConnectionStartSnackbar.onAction().subscribe(() => {
+			this.chatNodeVM.network.clickConnectionStartButton = null;
+		});
+	}
+
 	isConnected() {
 		return this.button.NextNodeId && (this.chatNodeVM.network.chatNodeVMs.filter(x => x.chatNode.Id == this.button.NextNodeId).length > 0);
 	}
@@ -628,7 +834,8 @@ class ChatButtonConnector {
 export class ChatNodeVM {
 	constructor(
 		public network: ChatFlowNetwork,
-		public chatNode: models.ChatNode) {
+		public chatNode: models.ChatNode,
+		public snackbar: MatSnackBar) {
 		this.network.chatNodeVMs.push(this);
 
 		this._x = (this.network.chatNodeVMs.indexOf(this)) * Config.defaultNodeWidth;
@@ -660,27 +867,43 @@ export class ChatNodeVM {
 	headerHeight: number = Config.defaultNodeHeaderHeight;
 
 	mouseDown(event: MouseEvent) {
+		if (!this.network.parent.ctrlDown && this.network.selectedNodes().length <= 1) {
+			this.network.parent.clearSelection();
+		}
+		this.toggleSelection();
+
 		this.network.draggingChatNode = this;
 
 		let targetXY = this.network.parent.transformCoordinates(event.pageX, event.pageY, event);
 		let mouseOffsetX = targetXY.x - this._x;
 		let mouseOffsetY = targetXY.y - this._y;
 		this.network.draggingChatNodeOffset = new Point(mouseOffsetX, mouseOffsetY);
+
+		this.network.selectedNodeOffsets = {}; //clearing
+		let selectedNodes = this.network.selectedNodes();
+		if (selectedNodes && selectedNodes.length > 0) {
+			selectedNodes.forEach(n => {
+				let mouseOffset = {
+					x: targetXY.x - n._x,
+					y: targetXY.y - n._y,
+				};
+
+				this.network.selectedNodeOffsets[n.chatNode.Id] = new Point(mouseOffset.x, mouseOffset.y);
+			});
+		}
 	}
 
 	mouseUp(event: MouseEvent) {
 		let nw = this.network;
 		if (!nw.newChatNodeConnection.isHidden) {
-			if (nw.newChatNodeConnection.srcButtonConnector.chatNodeVM != this)
-				nw.newChatNodeConnection.srcButtonConnector.setButtonNextNodeId(this.chatNode.Id);
+			nw.newChatNodeConnection.srcButtonConnector.setButtonNextNodeId(this.chatNode.Id);
 		}
 	}
 
 	mouseEnter(event: MouseEvent) {
 		let nw = this.network;
 		if (!nw.newChatNodeConnection.isHidden) {
-			if (nw.newChatNodeConnection.srcButtonConnector.chatNodeVM != this)
-				nw.newChatNodeConnection.canConnect = true;
+			nw.newChatNodeConnection.canConnect = true;
 		}
 	}
 
@@ -692,7 +915,7 @@ export class ChatNodeVM {
 	}
 
 	chatButtonConnectors() {
-		return this.chatNode.Buttons.map(btn => new ChatButtonConnector(this, btn));
+		return this.chatNode.Buttons.map(btn => new ChatButtonConnector(this, btn, this.snackbar));
 	}
 
 	nodeConnectorY() {
@@ -703,7 +926,35 @@ export class ChatNodeVM {
 		return (this.x()) + (this.width() / 2) - this.circleRadius;
 	}
 
+	clickConnectionActive() {
+		return this.network.clickConnectionStartButton;
+	}
+
+	nodeClick() {
+		if (this.clickConnectionActive()) {
+			this.network.clickConnectionStartButton.setButtonNextNodeId(this.chatNode.Id);
+			this.network.clickConnectionStartButton = null;
+			this.network.clickConnectionStartSnackbar.dismiss();
+		} else {
+			if (!this.network.parent.ctrlDown && this.network.selectedNodes().length > 1) {
+				this.network.parent.clearSelection();
+			}
+		}
+	}
+
 	circleRadius = Config.buttonCircleRadius;
+
+	isSelected: boolean = false;
+	toggleSelection() {
+		this.isSelected = !this.isSelected;
+	}
+	isNodeEmpty() {
+		if ((!this.chatNode.Sections || this.chatNode.Sections.length <= 0) && (!this.chatNode.Buttons || this.chatNode.Buttons.length <= 0)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 
 class Point {

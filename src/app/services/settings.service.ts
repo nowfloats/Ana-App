@@ -59,10 +59,13 @@ export class SettingsService {
 				savedProjs.push(name);
 			}
 		}
-		return savedProjs;
+		return savedProjs.sort((x, y) => ((x && y) ? x.localeCompare(y) : 1));
 	}
 
 	renameChatProject(oldName: string, newName: string) {
+		if (oldName == newName)
+			return;
+
 		oldName += ".anaproj";
 		newName += ".anaproj";
 

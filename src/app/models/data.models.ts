@@ -47,11 +47,11 @@ export interface Color {
 }
 
 export interface BusinessAccount {
-	colors: Color[];
+	colors?: Color[];
 	createdAt?: number;
 	email: string;
 	id?: string;
-	logoUrl: string;
+	logoUrl?: string;
 	modifiedAt?: number;
 	name: string;
 	phone: string;
@@ -81,9 +81,9 @@ export interface ListData<TItem> {
 export enum BusinessAccountStatus {
 	INACTIVE = 0,
 	ACTIVE = 1,
-	EXPIRED = 'EXPIRED',
-	BLOCKED = 'BLOCKED',
-	DELETED = 'DELETED'
+	EXPIRED = 2,
+	BLOCKED = 3,
+	DELETED = 4
 }
 
 export enum DevicePlatform {
@@ -121,7 +121,7 @@ export interface User {
 }
 
 export interface UserRegisterModel {
-	businessId: string,
+	businessId?: string,
 	email: string,
 	name: string,
 	password: string,
@@ -140,4 +140,9 @@ export interface ChatProject {
 	status?: string;
 	updatedAt?: number;
 	userId?: string;
+}
+
+export interface RegisterOnAnaCloudDetails {
+	business: BusinessAccount;
+	user: UserRegisterModel;
 }
