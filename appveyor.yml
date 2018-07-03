@@ -62,9 +62,7 @@ install:
   - npm install -g popper.js
   - npm install -g jquery
   - npm install --dev
-  - node_modules/.bin/electron-builder --help
   - node_modules/.bin/electron-builder
-  - electron-builder
   
 test_script:
   # Output useful info for debugging.
