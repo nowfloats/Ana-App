@@ -58,7 +58,6 @@ before_script:
 script:
   - cd dist/
   - sudo apt update
-  - sudo apt-get install --no-install-recommends yarn
   - yarn add electron-builder@19.56.0 --dev
   # - npm install -g electron-builder
   - npm install -g popper.js
