@@ -71,7 +71,7 @@ script:
   - snap version
   - snap list snapcraft
   - snapcraft --version
-  - snapcraft init
+  # - snapcraft init
   - npm install --dev
   - electron-builder
 
