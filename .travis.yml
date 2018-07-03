@@ -57,20 +57,12 @@ before_script:
   
 script:
   - cd dist/
-  - sudo add-apt-repository ppa:snappy-dev/tools -y
   - sudo apt update
   - sudo apt-get install --no-install-recommends yarn
   - yarn add electron-builder@19.56.0 --dev
   # - npm install -g electron-builder
   - npm install -g popper.js
   - npm install -g jquery
-  - sudo apt install snapd
-  - sudo apt install snapcraft
-  - sudo snap install snapcraft --classic
-  - snap version
-  - snap list snapcraft
-  - snapcraft --version
-  # - snapcraft init
   - npm install --dev
   - electron-builder
 
